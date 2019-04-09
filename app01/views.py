@@ -111,7 +111,9 @@ def home(request):
 
 
 def t_history(request):
+
     print("hehe")
+
     if request.method == 'GET':
         course_id = request.GET.get('course_id')
         print(course_id)
@@ -266,8 +268,10 @@ def t_history(request):
 
 
 def s_history(request):
+
     print("haha")
     context = {}
+
     if request.method == 'GET':
 
         module_id = request.GET.get('module_id')
@@ -286,6 +290,7 @@ def s_history(request):
             attendance_record = Attendance_Record.objects.order_by("-today_date").select_related("c_to_m_id").filter(
                 s_id_id=id,
                 c_to_m_id__in=course_module)
+
             attendance_time = 0
             total_time = 0
             for a_r in attendance_record:
@@ -302,6 +307,7 @@ def s_history(request):
                 else:
                     attendance_time += 0
 
+
             paginator = Paginator(attendance_record, 2)  # 每页显示2条
             try:
                 attendance_record_p = paginator.page(page)
@@ -312,15 +318,25 @@ def s_history(request):
                 # 如果请求的页数不在合法的页数范围内，返回结果的最后一页。
                 attendance_record_p = paginator.page(paginator.num_pages)
 
+            attendance_time = 0
+            total_time = 0
+
+
             for a_r in attendance_record_p:
                 d = {'id': a_r.id, 'today_date': a_r.today_date.strftime('%Y-%m-%d'),
                      'start_time': a_r.c_to_m_id.start_time.strftime('%H:%M:%S'),
                      'end_time': a_r.c_to_m_id.end_time.strftime('%H:%M:%S'), 'class_room': a_r.c_to_m_id.class_room,
                      'arrive_time': a_r.arrive_time.strftime('%H:%M:%S'), 'is_late': a_r.is_late, 'is_abs': a_r.is_abs,
                      }
+
             attendance_rate = attendance_time / total_time * 100
 
             data.append(d)
+
+
+
+
+
 
             data1 = {
                 'num_pages': paginator.num_pages, 'current_page': page,
@@ -345,7 +361,7 @@ def s_history(request):
 
             }
 
-    return render(request, 's_history.html', context=context)
+        return render(request, 's_history.html', context=context)
 
 
 def open_camera(request):
