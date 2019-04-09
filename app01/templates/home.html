@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="">
+
+
+        <div class="jumbotron ">
+            <h1 class="display-4">{{ course_module.m_id.name }}</h1>
+            <button type="button" class="btn btn-success" id="open_camera">open camera</button>
+            <button type="button" class="btn btn-danger">close camera</button>
+
+        </div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">student ID</th>
+                <th scope="col">name</th>
+                <th scope="col">arrival time</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for user in user_list %}
+                <tr>
+                    <th scope="row"><input type="checkbox"></th>
+                    <td>{{ user.s_id }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>11:00</td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+
+
+        // 请求服务器，返回JSON
+
+        $(document).ready(function () {
+            $("#open_camera").click(function () {
+
+                var request = $.ajax({
+                    url: "{% url 'open_camera' %}",
+                    method: "POST",
+                    data: {},
+
+                });
+
+                request.done(function (msg) {
+                    console.log("ok")
+                });
+
+                request.fail(function (jqXHR, textStatus) {
+                    console.log(textStatus)
+                });
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+    <!-- Bootstrap core CSS -->
+
+
+    <!-- Custom styles for this template -->
+
+    <link href="{% static './css/signin.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+    <form class="form-signin" action="{% url 'login' %}" method="post">
+        <img class="mb-4" src="{% static './image/logo.png' %}" alt="" width="200" height="100">
+        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+        <label for="inputID" class="sr-only">Student ID/Teacher ID</label>
+        <input type="text" name="s_id" id="inputID" class="form-control" placeholder="Student ID/Teacher ID" required=""
+               autofocus="">
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password"
+               required="">
+        <div class="checkbox mb-3">
+            <label>
+                <input type="checkbox" name="remember" value="remember"> Remember me
+            </label>
+        </div>
+        {{ meg }}
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+
+    </form>
+
+
+
+{% endblock %}
+

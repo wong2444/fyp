@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+{% load myTag %}
+{% block content %}
+
+    <div class="">
+
+
+        <div class="jumbotron ">
+            <h1 class="display-4">student attendance history</h1>
+
+
+        </div>
+
+        <form>
+            <div class="form-group row">
+
+                <label for="staticEmail" class="col-sm-1 col-form-label">Module:</label>
+                <div class="col-sm-2">
+                    <select class="form-control" id="moduleSelect" name="module">
+                                                {% for c_m in course_module %}
+                                                    <option value="{{ c_m.m_id.id }}">{{ c_m.m_id.m_id }}-{{ c_m.m_id.name }}</option>
+                                                {% endfor %}
+                                                {% list_distinct course_module 'm' %}
+
+                    </select>
+                </div>
+
+
+                {#                <button type="submit" class="btn btn-primary mb-2">Confirm identity</button>#}
+
+            </div>
+
+        </form>
+        <table class="table" id="s_table">
+            <thead>
+            <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Time</th>
+                <th scope="col">Arrival time</th>
+                <th scope="col">Module start time</th>
+                <th scope="col">Module end time</th>
+                <th scope="col">Late</th>
+                <th scope="col">Absent</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td colspan='5'>no data show</td>
+            </tr>
+
+
+            </tbody>
+        </table>
+        <nav aria-label="Page navigation example" id="pg">
+
+        </nav>
+    </div>
+
+
+    <script>
+
+
+        // 请求服务器，返回JSON
+
+        $(document).ready(function () {
+
+
+            $('#moduleSelect').change(function () {
+
+
+                var module = $("#moduleSelect option:selected");
+
+                $("#s_table tbody").html("<tr><td colspan='5'>no data show</td></tr>");
+                {#alert(course.val());#}
+                $.ajax({
+                    url: "{% url 's_history' %}",
+                    type: "GET",
+                    data: {"module_id": module.val(), },
+                    success: function (data) {
+                        getData();
+
+                    }
+                    ,
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        alert(xhr.status);
+                    }
+                });
+            });
+
+
+
+            {#console.log(that.value);#}
+
+
+        });
+
+        function getData(page = 1) {
+            var module = $("#moduleSelect option:selected");
+
+            $("#s_table tbody").html("<tr><td colspan='4'>no data show</td></tr>");
+            {#alert(course.val());#}
+            $.ajax({
+                url: "{% url 't_history' %}",
+                type: "GET",
+                data: {
+                    "module_id": module.val(),
+                    "page": page
+                },
+                success: function (data) {
+                    var str = "";
+                    for (var i = 0; i < data.data.length; i++) {
+                        str += `<tr>`;
+                        if (data.data[i].is_abs) {
+                            var check = "";
+                            var bgc = "red";
+
+                        } else if (data.data[i].is_late) {
+                            var check = "checked";
+                            var bgc = "coral";
+                        } else {
+                            var check = "checked";
+                            var bgc = "";
+                        }
+                        str += `<th scope='row' style="background-color:${bgc};"><input type='checkbox' ${check} disabled></th>`;
+                        str += `<td >${data.data[i].s_id}</td>`;
+                        str += `<td>${data.data[i].name}</td>`;
+                        if (data.data[i].is_abs) {
+                            str += `<td data-id='${data.data[i].a_r_id}'>-</td>`;
+                        } else {
+                            str += `<td data-id='${data.data[i].a_r_id}'>${data.data[i].arrive_time}</td>`;
+                        }
+
+                        str += `<td><input type='button' value='edit' class="btn btn-primary" onclick='editCol(this)'></td>`;
+                        str += `</tr>`;
+
+
+                    }
+                    $("#s_table tbody").html(str);
+                    str = "";
+                    str += `<ul class="pagination">`;
+                    if (data.has_previous) {
+                        var noPrev = '';
+                    } else {
+                        var noPrev = "disabled";
+                    }
+                    str += `<li class="page-item ${noPrev}">`;
+                    str += ` <a class="page-link" href="javascript:void(0);" onclick="getData(${page - 1})" aria-label="Previous">`;
+                    str += ` <span aria-hidden="true">&laquo;</span>`;
+                    str += ` <span class="sr-only">Previous</span>`;
+                    str += ` </a></li>`;
+
+                    for (var i = 1; i <= data.num_pages; i++) {
+                        if (data.current_page == i) {
+
+                            str += `<li class="page-item active"><a class="page-link" href="javascript:void(0);">${i}</a></li>`;
+                        } else {
+
+                            str += `<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getData(${i})" >${i}</a></li>`;
+                        }
+
+
+                    }
+                    if (data.has_next) {
+                        var noNext = "";
+                    } else {
+                        var noNext = "disabled";
+                    }
+                    str += ` <li class="page-item ${noNext}">`;
+
+                    str += `<a class="page-link" href="javascript:void(0);" onclick="getData(${page + 1})" aria-label="Next">`;
+                    str += `<span aria-hidden="true">&raquo;</span>`;
+                    str += `<span class="sr-only">Next</span></a></li></ul>`;
+                    $("#pg").html(str);
+                }
+                ,
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(xhr.status);
+                }
+            });
+        }
+
+
+    </script>
+{% endblock %}
