@@ -126,9 +126,9 @@ def t_history(request):
             return redirect(reverse('login'))
         elif time is not None:
             course_module = \
-                Course_to_Module.objects.select_related("c_id", "m_id", "s_id").filter(c_id_id=course_id,
-                                                                                       m_id_id=module_id, s_id_id=id,
-                                                                                       start_time=time, )
+                Course_to_Module.objects.filter(c_id_id=course_id,
+                                                m_id_id=module_id, s_id_id=id,
+                                                start_time=time, )
 
             attendance_record = Attendance_Record.objects.select_related("s_id").filter(today_date=date,
                                                                                         c_to_m_id__in=course_module)
@@ -159,9 +159,10 @@ def t_history(request):
             return JsonResponse(data1, safe=False)
         elif date is not None:
             course_module = \
-                Course_to_Module.objects.select_related("c_id", "m_id", "s_id").filter(c_id_id=course_id,
-                                                                                       m_id_id=module_id, s_id_id=id,
-                                                                                       ).values('start_time').distinct()
+                Course_to_Module.objects.select_related("c_id", "m_id", "s_id").filter(
+                    c_id_id=course_id,
+                    m_id_id=module_id, s_id_id=id,
+                ).values('start_time').distinct()
             # attendance_record = Attendance_Record.objects.filter(today_date=date, c_to_m_id__in=course_module).values(
             #     'today_date').distinct()
 
@@ -174,10 +175,10 @@ def t_history(request):
 
         elif module_id is not None:
             course_module = \
-                Course_to_Module.objects.select_related("c_id", "m_id", "s_id").filter(c_id_id=course_id,
-                                                                                       m_id_id=module_id, s_id_id=id)
+                Course_to_Module.objects.filter(c_id_id=course_id, m_id_id=module_id, s_id_id=id)
 
-            attendance_record = Attendance_Record.objects.filter(c_to_m_id__in=course_module).values(
+            attendance_record = Attendance_Record.objects.order_by("-today_date").filter(
+                c_to_m_id__in=course_module).values(
                 'today_date').distinct()
             # today = time.strftime('%Y-%m-%d', time.localtime(time.time()))
             # for c_m in course_module:
@@ -276,9 +277,11 @@ def s_history(request):
         if s_id is None:
             return redirect(reverse('login'))
         elif module_id is not None:
-
-            attendance_record = Attendance_Record.objects.select_related("c_to_m_id").filter(s_id_id=id,
-                                                                                             c_to_m_id_id=module_id)
+            course_module = \
+                Course_to_Module.objects.filter(m_id_id=module_id)
+            attendance_record = Attendance_Record.objects.order_by("-today_date").select_related("c_to_m_id").filter(
+                s_id_id=id,
+                c_to_m_id__in=course_module)
 
             paginator = Paginator(attendance_record, 2)  # 每页显示2条
             try:
@@ -290,8 +293,12 @@ def s_history(request):
                 # 如果请求的页数不在合法的页数范围内，返回结果的最后一页。
                 attendance_record_p = paginator.page(paginator.num_pages)
 
+            attendance_time = 0
+            tottal_time = 0
+
             for a_r in attendance_record_p:
-                d = {'id': a_r.id, 'start_time': a_r.c_to_m_id.start_time.strftime('%H:%M:%S'),
+                d = {'id': a_r.id, 'today_date': a_r.today_date.strftime('%Y-%m-%d'),
+                     'start_time': a_r.c_to_m_id.start_time.strftime('%H:%M:%S'),
                      'end_time': a_r.c_to_m_id.end_time.strftime('%H:%M:%S'), 'class_room': a_r.c_to_m_id.class_room,
                      'arrive_time': a_r.arrive_time.strftime('%H:%M:%S'), 'is_late': a_r.is_late, 'is_abs': a_r.is_abs,
                      }
@@ -309,14 +316,15 @@ def s_history(request):
 
 
         else:
-            m_id_id = Attendance_Record.objects.filter(s_id_id=id, ).values('m_id_id').distinct()
-            module = Course_to_Module.objects.select_related("m_id").filter(id__in=m_id_id)
+            m_id_id = Attendance_Record.objects.filter(s_id_id=id, ).values('c_to_m_id').distinct()
+            course_to_module = Course_to_Module.objects.select_related("m_id").filter(id__in=m_id_id)
+            print(course_to_module)
 
             # print(s_id)
             # print(course_module)
             context = {
 
-                "module": module,
+                "course_to_module": course_to_module,
 
             }
 

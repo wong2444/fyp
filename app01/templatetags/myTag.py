@@ -18,6 +18,7 @@ def list_distinct(course_module,name):
                 str += "<option value='%s'>%s</option>" % (c_m.c_id.id, c_m.c_id.name)
     elif name == "m":
         temp = []
+        str += "<option %s>%s</option>" % ("selected", "---------")
         for c_m in course_module:
             if not c_m.m_id.id in temp:
                 temp.append(c_m.m_id.id)
