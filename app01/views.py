@@ -111,7 +111,6 @@ def home(request):
 
 
 def t_history(request):
-
     print("hehe")
 
     if request.method == 'GET':
@@ -268,7 +267,6 @@ def t_history(request):
 
 
 def s_history(request):
-
     print("haha")
     context = {}
 
@@ -307,7 +305,6 @@ def s_history(request):
                 else:
                     attendance_time += 0
 
-
             paginator = Paginator(attendance_record, 2)  # 每页显示2条
             try:
                 attendance_record_p = paginator.page(page)
@@ -321,22 +318,18 @@ def s_history(request):
             attendance_time = 0
             total_time = 0
 
-
             for a_r in attendance_record_p:
                 d = {'id': a_r.id, 'today_date': a_r.today_date.strftime('%Y-%m-%d'),
                      'start_time': a_r.c_to_m_id.start_time.strftime('%H:%M:%S'),
                      'end_time': a_r.c_to_m_id.end_time.strftime('%H:%M:%S'), 'class_room': a_r.c_to_m_id.class_room,
                      'arrive_time': a_r.arrive_time.strftime('%H:%M:%S'), 'is_late': a_r.is_late, 'is_abs': a_r.is_abs,
                      }
-
-            attendance_rate = attendance_time / total_time * 100
+            if attendance_time == 0:
+                attendance_rate = 0
+            else:
+                attendance_rate = attendance_time / total_time * 100
 
             data.append(d)
-
-
-
-
-
 
             data1 = {
                 'num_pages': paginator.num_pages, 'current_page': page,
