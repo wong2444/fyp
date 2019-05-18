@@ -2,18 +2,7 @@
 <project version="4">
   <component name="dataSourceStorageLocal">
     <data-source name="face_recognition@localhost" uuid="4486c099-ab1e-44d4-adc4-4b625e883e5b">
-<<<<<<< HEAD
-      <database-info product="MySQL" version="5.7.19" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.46 ( Revision: 9cc87a48e75c2d2e87c1a293b2862ce651cb256e )" family="MYSQL" exact-version="5.7.19">
-=======
-      <database-info product="MySQL" version="5.7.19" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.46 ( Revision: 9cc87a48e75c2d2e87c1a293b2862ce651cb256e )" dbms="MYSQL" exact-version="5.7.19">
->>>>>>> 0c26096a56a5845f0446e9f9edb5876c35959ddc
-        <extra-name-characters>#@</extra-name-characters>
-        <identifier-quote-string>`</identifier-quote-string>
-      </database-info>
-      <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower" />
-      <secret-storage>master_key</secret-storage>
-      <user-name>root</user-name>
-      <introspection-schemas>*:@</introspection-schemas>
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" family="MYSQL" exact-version="0.0" />
     </data-source>
   </component>
 </project>
