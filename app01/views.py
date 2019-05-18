@@ -133,7 +133,7 @@ def t_history(request):
             attendance_record = Attendance_Record.objects.select_related("s_id").filter(today_date=date,
                                                                                         c_to_m_id__in=course_module)
 
-            paginator = Paginator(attendance_record, 2)  # 每页显示2条
+            paginator = Paginator(attendance_record, 10)  # 每页显示2条
             try:
                 attendance_record_p = paginator.page(page)
             except PageNotAnInteger:
@@ -283,7 +283,7 @@ def s_history(request):
                 s_id_id=id,
                 c_to_m_id__in=course_module)
 
-            paginator = Paginator(attendance_record, 2)  # 每页显示2条
+            paginator = Paginator(attendance_record, 10)  # 每页显示2条
             try:
                 attendance_record_p = paginator.page(page)
             except PageNotAnInteger:
