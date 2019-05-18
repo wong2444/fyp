@@ -13,7 +13,7 @@
 
         <form>
             <div class="form-group row">
-                <label for="staticEmail" class="col-sm-1 col-form-label">Course:</label>
+                <label  class="col-sm-1 col-form-label">Course:</label>
                 <div class="col-sm-2">
                     <select class="form-control" id="courseSelect" name="course">
                         {#                        {% for c_m in course_module %}#}
@@ -23,7 +23,7 @@
 
                     </select>
                 </div>
-                <label for="staticEmail" class="col-sm-1 col-form-label">Module:</label>
+                <label  class="col-sm-1 col-form-label">Module:</label>
                 <div class="col-sm-2">
                     <select class="form-control" id="moduleSelect" name="module" disabled>
                         {#                        {% for c_m in course_module %}#}
@@ -33,13 +33,13 @@
 
                     </select>
                 </div>
-                <label for="staticEmail" class="col-sm-1 col-form-label">Date:</label>
+                <label  class="col-sm-1 col-form-label">Date:</label>
                 <div class="col-sm-1">
                     <select class="form-control" id="dateSelect" name="date" disabled>
 
                     </select>
                 </div>
-                <label for="staticEmail" class="col-sm-1 col-form-label">Time:</label>
+                <label  class="col-sm-1 col-form-label">Time:</label>
                 <div class="col-sm-2">
                     <select class="form-control" id="timeSelect" name="time" disabled>
 
@@ -87,10 +87,10 @@
                 $('#dateSelect').attr("disabled", true);
                 $('#timeSelect').attr("disabled", true);
 
-                {#var module = $("#moduleSelect option:selected");#}
+
                 var course = $("#courseSelect option:selected");
                 $("#s_table tbody").html("<tr><td colspan='5'>no data show</td></tr>");
-                {#alert(course.val());#}
+
                 $.ajax({
                     url: "{% url 't_history' %}",
                     type: "GET",
@@ -108,7 +108,7 @@
                             }
                         }
                         $('#moduleSelect').html(str);
-                        {#console.log(data[0].name);#}
+
 
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
@@ -123,7 +123,7 @@
                 var module = $("#moduleSelect option:selected");
                 var course = $("#courseSelect option:selected");
                 $("#s_table tbody").html("<tr><td colspan='5'>no data show</td></tr>");
-                {#alert(course.val());#}
+
                 $.ajax({
                     url: "{% url 't_history' %}",
                     type: "GET",
@@ -141,7 +141,7 @@
                             }
                         }
                         $('#dateSelect').html(str);
-                        {#console.log(data[0].name);#}
+
 
                     }
                     ,
@@ -157,7 +157,7 @@
                 var date = $("#dateSelect option:selected");
                 $("#s_table tbody").html("<tr><td colspan='5'>no data show</td></tr>");
 
-                {#alert(course.val());#}
+
                 $.ajax({
                     url: "{% url 't_history' %}",
                     type: "GET",
@@ -176,7 +176,7 @@
                         }
 
                         $('#timeSelect').html(str);
-                        {#console.log(data[0].name);#}
+
 
                     }
                     ,
@@ -192,7 +192,7 @@
 
             });
 
-            {#console.log(that.value);#}
+
 
 
         });
@@ -203,7 +203,7 @@
             var date = $("#dateSelect option:selected");
             var time = $("#timeSelect option:selected");
             $("#s_table tbody").html("<tr><td colspan='4'>no data show</td></tr>");
-            {#alert(course.val());#}
+
             $.ajax({
                 url: "{% url 't_history' %}",
                 type: "GET",
@@ -298,7 +298,7 @@
             $(that).parent().html(`<input type='button' value='confirm' class="btn btn-success" onclick='saveCol(this)'>`);
 
 
-            {#console.log(that.value);#}
+
         }
 
         function saveCol(that) {

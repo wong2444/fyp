@@ -14,7 +14,7 @@
         <form>
             <div class="form-group row">
 
-                <label for="staticEmail" class="col-sm-1 col-form-label">Module:</label>
+                <label  class="col-sm-1 col-form-label">Module:</label>
                 <div class="col-sm-2">
                     <select class="form-control" id="moduleSelect" name="module">
 
@@ -22,7 +22,7 @@
 
                     </select>
                 </div>
-                <label for="staticEmail" class="col-sm-1 col-form-label">Attendance Rate:</label>
+                <label  class="col-sm-1 col-form-label">Attendance Rate:</label>
                 <div class="col-sm-2">
                     <span id="attendance_rate"></span>
                 </div>
@@ -72,7 +72,7 @@
             });
 
 
-            {#console.log(that.value);#}
+
 
 
         });
@@ -81,7 +81,8 @@
             var module = $("#moduleSelect option:selected");
 
             $("#s_table tbody").html("<tr><td colspan='7'>no data show</td></tr>");
-            {#alert(course.val());#}
+
+
             $.ajax({
                 url: "{% url 's_history' %}",
                 type: "GET",
@@ -91,6 +92,13 @@
                 },
                 success: function (data) {
                     var str = "";
+
+                    if (data.attendance_rate < 70) {
+                        var a_r_c = "red";
+                    } else {
+                        var a_r_c = "black";
+                    }
+                    $("#attendance_rate").html(`<font color="${a_r_c}">${data.attendance_rate}%</font>`);
 
                     for (var i = 0; i < data.data.length; i++) {
                         if (data.data[i].is_abs) {

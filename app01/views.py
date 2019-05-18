@@ -111,6 +111,8 @@ def home(request):
 
 
 def t_history(request):
+    print("hehe")
+
     if request.method == 'GET':
         course_id = request.GET.get('course_id')
         print(course_id)
@@ -265,6 +267,9 @@ def t_history(request):
 
 
 def s_history(request):
+    print("haha")
+    context = {}
+
     if request.method == 'GET':
 
         module_id = request.GET.get('module_id')
@@ -274,6 +279,7 @@ def s_history(request):
         # print(user.name)
         data = []
         page = request.GET.get('page')
+
         if s_id is None:
             return redirect(reverse('login'))
         elif module_id is not None:
@@ -283,7 +289,27 @@ def s_history(request):
                 s_id_id=id,
                 c_to_m_id__in=course_module)
 
+<<<<<<< HEAD
             paginator = Paginator(attendance_record, 10)  # 每页显示2条
+=======
+            attendance_time = 0
+            total_time = 0
+            for a_r in attendance_record:
+                s_start_time = a_r.c_to_m_id.start_time.strftime('%H:%M:%S')  # datetime.time to string
+                s_start_time = datetime.datetime.strptime(s_start_time, '%H:%M:%S')  # string to datetime.datetime
+                s_end_time = a_r.c_to_m_id.end_time.strftime('%H:%M:%S')  # datetime.time to string
+                s_end_time = datetime.datetime.strptime(s_end_time, '%H:%M:%S')  # string to datetime.datetime
+                s_arrive_time = a_r.arrive_time.strftime('%H:%M:%S')  # datetime.time to string
+                s_arrive_time = datetime.datetime.strptime(s_arrive_time, '%H:%M:%S')  # string to datetime.datetime
+
+                total_time += (s_end_time - s_start_time).seconds
+                if not a_r.is_abs:
+                    attendance_time += (s_end_time - s_arrive_time).seconds
+                else:
+                    attendance_time += 0
+
+            paginator = Paginator(attendance_record, 2)  # 每页显示2条
+>>>>>>> 85a2223d52fb863ea28da509edf8bf9f5acdb7d4
             try:
                 attendance_record_p = paginator.page(page)
             except PageNotAnInteger:
@@ -294,7 +320,7 @@ def s_history(request):
                 attendance_record_p = paginator.page(paginator.num_pages)
 
             attendance_time = 0
-            tottal_time = 0
+            total_time = 0
 
             for a_r in attendance_record_p:
                 d = {'id': a_r.id, 'today_date': a_r.today_date.strftime('%Y-%m-%d'),
@@ -302,13 +328,17 @@ def s_history(request):
                      'end_time': a_r.c_to_m_id.end_time.strftime('%H:%M:%S'), 'class_room': a_r.c_to_m_id.class_room,
                      'arrive_time': a_r.arrive_time.strftime('%H:%M:%S'), 'is_late': a_r.is_late, 'is_abs': a_r.is_abs,
                      }
-                print(d)
-                data.append(d)
+            if attendance_time == 0:
+                attendance_rate = 0
+            else:
+                attendance_rate = attendance_time / total_time * 100
 
-            print(data)
+            data.append(d)
+
             data1 = {
                 'num_pages': paginator.num_pages, 'current_page': page,
                 'has_previous': attendance_record_p.has_previous(), 'has_next': attendance_record_p.has_next(),
+                'attendance_rate': attendance_rate,
                 'data': data
             }
             return JsonResponse(data1, safe=False)
@@ -328,7 +358,7 @@ def s_history(request):
 
             }
 
-    return render(request, 's_history.html', context=context)
+        return render(request, 's_history.html', context=context)
 
 
 def open_camera(request):
