@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load myTag %}
 {% block content %}
 
     <div class="">
@@ -7,31 +7,28 @@
 
         <div class="jumbotron ">
             <h1 class="display-4">{{ course_module.m_id.name }}</h1>
-            <button type="button" class="btn btn-success" id="open_camera">open camera</button>
-            <button type="button" class="btn btn-danger">close camera</button>
+            {% if request.session.role == "teacher" %}
+                <button type="button" class="btn btn-success" id="open_camera">open camera</button>
+            {% endif %}
 
         </div>
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">student ID</th>
-                <th scope="col">name</th>
-                <th scope="col">arrival time</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for user in user_list %}
+        {% if course_module.m_id.name != "no course at this time" %}
+            <table class="table">
+                <thead>
                 <tr>
-                    <th scope="row"><input type="checkbox"></th>
-                    <td>{{ user.s_id }}</td>
-                    <td>{{ user.name }}</td>
-                    <td>11:00</td>
+                    <th scope="col">#</th>
+                    <th scope="col">student ID</th>
+                    <th scope="col">name</th>
+                    <th scope="col">arrival time</th>
                 </tr>
-            {% endfor %}
+                </thead>
+                <tbody>
+                {% userList user_list attendance_record %}
 
-            </tbody>
-        </table>
+
+                </tbody>
+            </table>
+        {% endif %}
     </div>
 
     <script>

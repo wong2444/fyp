@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load myTag %}
+{% block content %}
+
+    <div class="">
+
+
+        <div class="jumbotron ">
+            <h1 class="display-4">take photo for face recognition</h1>
+            <span id="btn_span"><button type="button" class="btn btn-success"
+                                        id="open_camera">open camera</button></span>
+
+        </div>
+
+        <script>
+
+
+            // 请求服务器，返回JSON
+
+            $(document).ready(function () {
+                $("#open_camera").click(function () {
+
+                    var request = $.ajax({
+                        url: "{% url 'take_photo' %}",
+                        method: "POST",
+                        data: {},
+
+                    });
+
+                    request.done(function (msg) {
+                       window.location.replace("{% url 'login' %}");
+                        console.log("ok")
+                    });
+
+                    request.fail(function (jqXHR, textStatus) {
+                        console.log(textStatus)
+                    });
+                });
+            });
+        </script>
+{% endblock %}
