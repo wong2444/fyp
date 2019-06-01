@@ -11,5 +11,5 @@
    <img src="https://upload.cc/i1/2019/06/01/hgMVGJ.jpg"/>
 6. watch the camera until your appear your name on sreen
 7. your attendance record appear in sreen like this
-   <img src="https://upload.cc/i1/2019/06/01/dOkI57.jpg"/>
+   <img src="https://upload.cc/i1/2019/06/01/iPaHwR.jpg"/>
 8. click on `history` button in nav bar to watch your attendance history
